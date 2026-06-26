@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.env
+saved_models/*.pth
+temp_image.jpg
+test_image.jpg
