@@ -29,3 +29,34 @@ if st.button(
         st.write(
             answer
         )
+
+st.divider()
+
+if st.button(
+    "Explain Latest Stress Analysis"
+):
+
+    healthy = 73.08
+    moderate = 25.51
+    stressed = 1.41
+
+    prompt = f"""
+    Healthy Vegetation: {healthy}%
+    Moderate Vegetation: {moderate}%
+    Stressed Vegetation: {stressed}%
+
+    Explain this agricultural analysis in simple language
+    and suggest actions for farmers.
+    """
+
+    response = get_agri_advice(
+        prompt
+    )
+
+    st.subheader(
+        "AI Interpretation"
+    )
+
+    st.write(
+        response
+    )
