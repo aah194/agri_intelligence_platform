@@ -1,21 +1,29 @@
-from google import genai
-from dotenv import load_dotenv
-
 import os
+import streamlit as st
+from google import genai
 
-load_dotenv()
-
-API_KEY = os.getenv(
-    "GEMINI_API_KEY"
+API_KEY = st.secrets.get(
+    "GEMINI_API_KEY",
+    None
 )
 
-client = genai.Client(
-    api_key=API_KEY
-)
+if API_KEY:
+    client = genai.Client(
+        api_key=API_KEY
+    )
+else:
+    client = None
+
 
 def get_agri_advice(
     question
 ):
+
+    if client is None:
+        return (
+            "Gemini API key not configured. "
+            "Add GEMINI_API_KEY in Streamlit secrets."
+        )
 
     prompt = f"""
 You are an expert agricultural advisor.

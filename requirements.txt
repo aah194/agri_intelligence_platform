@@ -12,3 +12,4 @@ Pillow
 timm
 gdown
 google-genai
+python-dotenv
