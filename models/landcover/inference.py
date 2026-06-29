@@ -1,6 +1,8 @@
 from PIL import Image
 
 import torch
+import os
+import gdown
 
 from torchvision import transforms
 
@@ -17,9 +19,21 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-model = load_model(
-    "saved_models/swin_eurosat.pth"
-)
+# model = load_model(
+#     "saved_models/swin_eurosat.pth"
+# )
+MODEL_PATH = "saved_models/swin_eurosat.pth"
+
+if not os.path.exists(MODEL_PATH):
+    os.makedirs("saved_models", exist_ok=True)
+
+    gdown.download(
+        id="1xpYajQpNEfudyiisjvyn_Fv4mWKjQTWB",
+        output=MODEL_PATH,
+        quiet=False
+    )
+
+model = load_model(MODEL_PATH)
 
 
 def predict(image_path):
