@@ -10,5 +10,7 @@ datasets/sentinel/
 outputs/outputs/
 outputs/
 saved_models/
+!saved_models/yield_model.pkl
+outputs/
 datasets/
 *.pkl   

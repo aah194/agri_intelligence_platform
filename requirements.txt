@@ -11,3 +11,4 @@ torchvision
 Pillow
 timm
 gdown
+google-genai

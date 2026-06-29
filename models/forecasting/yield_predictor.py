@@ -1,26 +1,29 @@
+import os
 import joblib
 
+MODEL_PATH = "saved_models/yield_model.pkl"
 
-model = joblib.load(
-    "saved_models/yield_model.pkl"
-)
+if os.path.exists(MODEL_PATH):
+    model = joblib.load(MODEL_PATH)
+else:
+    model = None
 
 
 def predict_yield(
-    healthy,
-    moderate,
-    stressed
+    healthy_percent,
+    moderate_percent,
+    stressed_percent
 ):
+
+    if model is None:
+        return "Yield model unavailable"
 
     prediction = model.predict(
         [[
-            healthy,
-            moderate,
-            stressed
+            healthy_percent,
+            moderate_percent,
+            stressed_percent
         ]]
     )[0]
 
-    return round(
-        prediction,
-        2
-    )
+    return f"Predicted Yield: {round(prediction, 2)} tons/hectare"

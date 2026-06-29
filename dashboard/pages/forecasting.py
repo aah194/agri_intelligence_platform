@@ -1,5 +1,6 @@
 import streamlit as st
 import rasterio
+import os
 from utils.pdf_report import (
     generate_report
 )
@@ -24,7 +25,15 @@ if st.button(
 ):
 
     WINDOW_SIZE = 512
-
+if (
+    not os.path.exists("datasets/sentinel/B04.tif")
+    or
+    not os.path.exists("datasets/sentinel/B08.tif")
+):
+    st.warning(
+        "Sample Sentinel dataset unavailable in cloud deployment. Use Upload & Analyze page."
+    )
+    st.stop()
     with rasterio.open(
         "datasets/sentinel/B04.tif"
     ) as red_src:
