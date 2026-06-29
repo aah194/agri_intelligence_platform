@@ -7,3 +7,4 @@ temp_image.jpg
 test_image.jpg
 datasets/sentinel/
 *.tif
+outputs/outputs/

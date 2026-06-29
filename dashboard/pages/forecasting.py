@@ -85,8 +85,9 @@ if st.button(
     )
 
     st.success(
-        prediction
+        f"Predicted Yield: {prediction} tons/hectare"
     )
+
     pdf_file = generate_report(
     result["healthy_percent"],
     result["moderate_percent"],

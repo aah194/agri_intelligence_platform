@@ -1,23 +1,26 @@
+import joblib
+
+
+model = joblib.load(
+    "saved_models/yield_model.pkl"
+)
+
+
 def predict_yield(
     healthy,
     moderate,
     stressed
 ):
 
-    score = (
-        healthy * 1.0 +
-        moderate * 0.5 -
-        stressed * 1.0
+    prediction = model.predict(
+        [[
+            healthy,
+            moderate,
+            stressed
+        ]]
+    )[0]
+
+    return round(
+        prediction,
+        2
     )
-
-    if score > 80:
-
-        return "High Yield Expected"
-
-    elif score > 40:
-
-        return "Moderate Yield Expected"
-
-    else:
-
-        return "Low Yield Expected"
