@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 from google import genai
 
@@ -28,7 +27,7 @@ def get_agri_advice(
     prompt = f"""
 You are an expert agricultural advisor.
 
-Provide practical advice.
+Provide practical farming advice.
 
 Question:
 {question}
@@ -36,9 +35,17 @@ Question:
 Answer:
 """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
+    try:
 
-    return response.text
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+
+        return (
+            f"Gemini Error: {str(e)}"
+        )
