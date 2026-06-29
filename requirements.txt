@@ -9,3 +9,4 @@ reportlab
 torch
 torchvision
 Pillow
+timm
