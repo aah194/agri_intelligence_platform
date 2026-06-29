@@ -8,3 +8,7 @@ test_image.jpg
 datasets/sentinel/
 *.tif
 outputs/outputs/
+outputs/
+saved_models/
+datasets/
+*.pkl   
