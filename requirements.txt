@@ -6,3 +6,6 @@ rasterio
 scikit-learn
 joblib
 reportlab
+torch
+torchvision
+Pillow
