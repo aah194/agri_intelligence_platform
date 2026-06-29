@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 from preprocessing.ndvi import (
@@ -19,15 +20,15 @@ if st.button(
 ):
 
     nir = np.array([
-        [200,180,220],
-        [220,210,230],
-        [250,240,255]
+        [200, 180, 220],
+        [220, 210, 230],
+        [250, 240, 255]
     ])
 
     red = np.array([
-        [100,120,140],
-        [140,130,150],
-        [160,170,180]
+        [100, 120, 140],
+        [140, 130, 150],
+        [160, 170, 180]
     ])
 
     ndvi = calculate_ndvi(
@@ -42,10 +43,28 @@ if st.button(
         cmap="RdYlGn"
     )
 
+    ax.set_title(
+        "NDVI Map"
+    )
+
     plt.colorbar(
         img,
         ax=ax,
         label="NDVI"
+    )
+
+    os.makedirs(
+        "outputs",
+        exist_ok=True
+    )
+
+    fig.savefig(
+        "outputs/ndvi_map.png",
+        bbox_inches="tight"
+    )
+
+    st.success(
+        "NDVI map saved to outputs/ndvi_map.png"
     )
 
     st.pyplot(

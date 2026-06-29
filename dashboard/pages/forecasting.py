@@ -1,41 +1,111 @@
 import streamlit as st
+import rasterio
+from utils.pdf_report import (
+    generate_report
+)
+from preprocessing.ndvi import (
+    calculate_ndvi
+)
+
+from models.stress_detection.stress_detector import (
+    detect_stress
+)
+
+from models.forecasting.yield_predictor import (
+    predict_yield
+)
 
 st.title(
     "Yield Forecasting"
 )
 
-st.subheader(
-    "NDVI-Based Yield Prediction"
-)
-
-ndvi = st.slider(
-    "Average NDVI",
-    min_value=0.0,
-    max_value=1.0,
-    value=0.7,
-    step=0.01
-)
-
 if st.button(
-    "Predict Yield"
+    "Generate Forecast"
 ):
 
-    if ndvi > 0.7:
+    WINDOW_SIZE = 512
 
-        prediction = "High Yield Expected"
+    with rasterio.open(
+        "datasets/sentinel/B04.tif"
+    ) as red_src:
 
-    elif ndvi > 0.4:
+        red = red_src.read(
+            1,
+            window=rasterio.windows.Window(
+                0,
+                0,
+                WINDOW_SIZE,
+                WINDOW_SIZE
+            )
+        )
 
-        prediction = "Moderate Yield Expected"
+    with rasterio.open(
+        "datasets/sentinel/B08.tif"
+    ) as nir_src:
 
-    else:
+        nir = nir_src.read(
+            1,
+            window=rasterio.windows.Window(
+                0,
+                0,
+                WINDOW_SIZE,
+                WINDOW_SIZE
+            )
+        )
 
-        prediction = "Low Yield Expected"
+    ndvi = calculate_ndvi(
+        nir,
+        red
+    )
+
+    result = detect_stress(
+        ndvi
+    )
+
+    prediction = predict_yield(
+        result["healthy_percent"],
+        result["moderate_percent"],
+        result["stressed_percent"]
+    )
+
+    st.subheader(
+        "Vegetation Health"
+    )
+
+    st.write(
+        f"Healthy: {result['healthy_percent']}%"
+    )
+
+    st.write(
+        f"Moderate: {result['moderate_percent']}%"
+    )
+
+    st.write(
+        f"Stressed: {result['stressed_percent']}%"
+    )
 
     st.success(
         prediction
     )
-
-    st.write(
-        f"NDVI Used: {ndvi}"
+    pdf_file = generate_report(
+    result["healthy_percent"],
+    result["moderate_percent"],
+    result["stressed_percent"],
+    prediction
     )
+
+    st.success(
+    "PDF report generated successfully"
+    )
+
+    with open(
+    pdf_file,
+    "rb"
+    ) as file:
+
+     st.download_button(
+        label="Download Report",
+        data=file,
+        file_name="agri_report.pdf",
+        mime="application/pdf"
+     )    
